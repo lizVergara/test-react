@@ -2,43 +2,41 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { Card } from './components/pages/Card'
 import { Search_user } from './components/pages/Search_user';
+import { methodAjax } from './helpers/methodAjax'; // Importa methodAjax
+import { Global } from './helpers/Global'; // Importa Global
 
 function App() {
+  const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [players, setPlayers] = useState([]);
+  const [winner, setWinner] = useState({})
 
-  //use state cuando ya ingresa el user:
-  const [user, setUser] = useState({});
-
+  const getAllUsers = async () => {
+    const { data, charge } = await methodAjax(Global.url_get_all + "all", "GET");
+    if (data.status === 'success') {
+      setUsers(data.users);
+      setLoading(charge)
+    }
+  }
 
   useEffect(() => {
-    setUser({
-      name: 'liz'
-    })
+    getAllUsers()
   }, [])
-
   return (
+
     <>
-      <div>
-      </div>
       <h1>Pin pong game </h1>
+      {players.length < 2 ? <Card users={users} loading={loading} /> : <> </>}
+      {winner && winner.name ?
+        <>
+          <h2 style={{ color: 'red' }}>The winner is: <strong>{winner.name} </strong> </h2>
+          <hr></hr>
+          <button className='add point' onClick={() => window.location.reload()}>New match</button>
+        </>
+        :
+        <Search_user users={users} players={players} setPlayers={setPlayers} setWinner={setWinner} winner={winner} />
+      }
 
-      <Card />
-      <Search_user />
-
-      {/* <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
-
-
-      {/* cuando inicie la partida inicia card */}
-      {/* <Card player={{ user }} points={5} /> */}
     </>
   )
 }

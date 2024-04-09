@@ -1,5 +1,5 @@
 
-export const methodAjax = async (url, meth, dataGuardar = "") => {
+export const methodAjax = async (url, meth, dataSave = "") => {
 
     let charge = true;
 
@@ -16,7 +16,7 @@ export const methodAjax = async (url, meth, dataGuardar = "") => {
     if (meth == "POST" || meth == "PUT") {
         options = {
             method: meth,
-            body: JSON.stringify(dataGuardar),
+            body: JSON.stringify(dataSave),
             headers: {
                 "Content-type": "application/json"
             }

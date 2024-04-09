@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { methodAjax } from '../../helpers/methodAjax';
-import { Global } from '../../helpers/Global';
+import React from 'react';
 
-export const Card = () => {
-
-    const [users, setUsers] = useState([])
-    const getAllUsers = async (e) => {
-        const { data, charge } = await methodAjax(Global.url_get_all + "all", "GET");
-        if (data.status === 'success') {
-            data.map((element) => {
-
-                console.log(element)
-
-            });
-        }
-    }
-
-    useEffect(() => {
-        getAllUsers()
-    }, [])
+export const Card = ({ users, loading }) => {
     return (
         <section>
-            <h1>Users point ranking</h1>
-            <h2></h2>
-        </section >
+            <h2>Users point ranking</h2>
+            {loading ? <h3>Cargando</h3> :
+                <table className='table' >
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map((user, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{user.name}</td>
+                                    <td>{user.point}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            }
+        </section>
     )
 }
